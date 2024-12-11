@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recoloração de Imagens</title>
+    <style>
+        .color-picker-container {
+            margin-bottom: 20px;
+        }
+        .canvas-container {
+            position: relative;
+            width: 500px; /* Ajuste conforme necessário */
+            height: 793px; /* Ajuste conforme necessário */
+        }
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="color-picker-container">
+        <div>
+
+        </div>
+        <div>
+            <label for="hue2">Vestido:</label>
+            <input type="range" id="hue2" min="0" max="360" value="0" onchange="changeColor(2)">
+        </div>
+        <div>
+            <label for="hue3">Cabelo:</label>
+            <input type="range" id="hue3" min="0" max="360" value="0" onchange="changeColor(3)">
+        </div>
+        <div>
+            <label for="hue4">Sapatos:</label>
+            <input type="range" id="hue4" min="0" max="360" value="0" onchange="changeColor(4)">
+        </div>
+        <div>
+            <label for="hue5">Acessório:</label>
+            <input type="range" id="hue5" min="0" max="360" value="0" onchange="changeColor(5)"> 
+        </div>
+    </div>
+
+    <div class="canvas-container"> 
+        <canvas id="canvas1" width="500" height="793"></canvas> 
+        <canvas id="canvas2" width="500" height="793"></canvas> 
+        <canvas id="canvas3" width="500" height="793"></canvas> 
+        <canvas id="canvas4" width="500" height="793"></canvas> 
+        <canvas id="canvas5" width="500" height="793"></canvas> 
+        </div> <script> const images = [ 
+            'https://i.imgur.com/BGEjv1W.png', 
+            'https://i.imgur.com/E5BWCia.png', 
+            'https://i.imgur.com/y9BLhEQ.png', 
+            'https://i.imgur.com/LXU2sMv.png', 
+            'https://i.imgur.com/b4CaJKo.png'
+        ];
+
+        images.forEach((src, index) => {
+            const img = new Image();
+            img.crossOrigin = "anonymous"; // Adicione esta linha
+            img.src = src;
+            img.onload = () => {
+                const canvas = document.getElementById('canvas' + (index + 1));
+                const ctx = canvas.getContext('2d', { willReadFrequently: true }); // Adicione esta linha
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            };
+        });
+
+        function changeColor(imageNumber) {
+            const hue = document.getElementById('hue' + imageNumber).value;
+            const canvas = document.getElementById('canvas' + imageNumber);
+            const ctx = canvas.getContext('2d', { willReadFrequently: true }); // Adicione esta linha
+            const img = new Image();
+            img.crossOrigin = "anonymous"; // Adicione esta linha
+            img.src = images[imageNumber - 1];
+            img.onload = () => {
+                ctx.filter = `hue-rotate(${hue}deg)`;
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                ctx.filter = 'none'; // Resetar o filtro
+            };
+        }
+    </script>
+</body>
+</html>
